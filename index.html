@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- <script src="js/socket.io.js"></script> -->
+    <script src="js/socket.io.js"></script>
+    
+    <script src="js/howler.min.js"></script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="css/main.css">
+    <script src="js/main.js"></script>
+</head>
+
+<body>
+    <div class="map">
+        <video loop class="screensaver" width="100%" height="100%" src="vid/bubbles.webm"  type="video/webm"></video>
+        <video autoplay loop class="default" id="ocean" width="100%" height="270px" src="vid/ocean-loop.webm" type="video/webm"></video> 
+    </div>
+
+        <video width="1080px" height="1080px" id="b"  src=""  type="video/webm"></video>
+        <video width="1080px" height="1080px" id="c"  src=""  type="video/webm"></video>
+        <video width="1200px" height="500px" id="d"  src=""  type="video/webm"></video>
+        <video width="1080px" height="1080px" id="f"  src=""  type="video/webm"></video>
+        <video width="1080px" height="400px" id="g"  src=""  type="video/webm"></video>
+        <video width="1080px" height="600px" id="h"  src=""  type="video/webm"></video>
+        <video width="1080px" height="1080px" id="i"  src=""  type="video/webm"></video>    
+        <video width="700px" height="600px" id="n"  src=""  type="video/webm"></video>
+        <video width="1080px" height="1080px" id="o"  src=""  type="video/webm"></video>
+        <video autoplay loop width="500px" height="500px" id="sun"  src="vid/sun.webm"  type="video/webm"></video>
+                
+        <div class="data_sensor" id="sunlight">
+            <div class="info">
+                <h3>Sunlight</h3>
+                <h3 id="uv_status">Status</h3>
+                <h3 id="uv_value">Value</h3>
+            </div>
+        </div>
+        <div class="data_sensor" id="soil_moisture">
+            <div class="info">
+                <h3>Soil Moisture</h3>
+                <h3 id="soil_status">Status</h3>
+                <h3 id="soil_value">Value</h3>
+            </div>
+        </div>
+        <div class="data_sensor" id="humid">
+            <div class="info">
+                <div>Humidity</div>
+                <div id="humid_status">Status</div>
+                <div id="humid_value">Value</div>
+            </div>
+        </div>
+        
+    <script src="js/maptastic.min.js"></script>
+    <script>
+        Maptastic("b" , "c" , "d" , "f" , "g" , "h" , "i" , "n" , "o");
+    </script>
+</body>
+
+</html>
