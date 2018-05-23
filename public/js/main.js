@@ -1,82 +1,4 @@
 $(function(){
-    function displayUV(soundPath, timeout){
-        //if uv dialog is pop, then do nothing but just update timmer
-        if(uvTimer){
-            clearTimeout(uvTimer);
-            uvTimer = setTimeout(function(){
-                $("#sunlight").removeClass("show");
-                uvTimer = null;
-            }, timeout);
-            return;
-        }
-        //if uv dialog is not up 
-        $("#sunlight").addClass("show");
-        var sound = new Howl({
-            src: [soundPath]
-        });
-        if (sound) {
-            sound.play();
-        }
-        uvTimer = setTimeout(function(){
-            $("#sunlight").removeClass("show");
-            uvTimer = null;
-        }, timeout);
-    }
-
-    function displaySoil(soundPath, timeout){
-            if(soilTimer){
-                clearTimeout(soilTimer);
-                soilTimer = setTimeout(function(){
-                    $("#soil_moisture").removeClass("show");
-                    soilTimer = null;
-                }, timeout);
-
-                return;
-            }
-            $("#soil_moisture").addClass("show");
-            var sound = new Howl({
-                src: [soundPath]
-            });
-            if (sound) {
-                sound.play();
-            }            
-                soilTimer = setTimeout(function(){
-                $("#soil_moisture").removeClass("show");
-                soilTimer = null;
-            }, timeout);
-    }
-
-    function displayHumid(soundPath, timeout){
-            //if uv dialog is pop, then do nothing but just update timmer
-            if(humidTimer){
-                clearTimeout(humidTimer);
-                humidTimer = setTimeout(function(){
-                    $("#humid").removeClass("show");
-                    humidTimer = null;
-                }, timeout)
-
-                return;
-            }
-                    $("#humid").addClass("show");
-                    var sound = new Howl({
-                        src: [soundPath]
-                    });
-                    if (sound) {
-                        sound.play();
-                    }
-                    humidTimer = setTimeout(function(){
-                    $("#humid").removeClass("show");
-                    humidTimer = null;
-                }, timeout);
-    }
-
-    function loadVid(item){                
-        if(item.displayData) return;
-        $(item.divId).attr('src', item.videoPath);
-        $(item.divId).get(0).load();
-        $(item.divId).get(0).pause();
-    }
-
     var item = {
         "a": {
             videoPath: "",
@@ -176,10 +98,91 @@ $(function(){
         }
     }
 
+//DISPLAY SENSOR DATA ======================================
+    function displayUV(soundPath, timeout){
+        //if uv dialog is pop, then do nothing but just update timmer
+        if(uvTimer){
+            clearTimeout(uvTimer);
+            uvTimer = setTimeout(function(){
+                $("#sunlight").removeClass("show");
+                uvTimer = null;
+            }, timeout);
+            return;
+        }
+        //if uv dialog is not up 
+        $("#sunlight").addClass("show");
+        var sound = new Howl({
+            src: [soundPath]
+        });
+        if (sound) {
+            sound.play();
+        }
+        uvTimer = setTimeout(function(){
+            $("#sunlight").removeClass("show");
+            uvTimer = null;
+        }, timeout);
+    }
+
+    function displaySoil(soundPath, timeout){
+            if(soilTimer){
+                clearTimeout(soilTimer);
+                soilTimer = setTimeout(function(){
+                    $("#soil_moisture").removeClass("show");
+                    soilTimer = null;
+                }, timeout);
+
+                return;
+            }
+            $("#soil_moisture").addClass("show");
+            var sound = new Howl({
+                src: [soundPath]
+            });
+            if (sound) {
+                sound.play();
+            }            
+                soilTimer = setTimeout(function(){
+                $("#soil_moisture").removeClass("show");
+                soilTimer = null;
+            }, timeout);
+    }
+
+    function displayHumid(soundPath, timeout){
+            //if uv dialog is pop, then do nothing but just update timmer
+            if(humidTimer){
+                clearTimeout(humidTimer);
+                humidTimer = setTimeout(function(){
+                    $("#humid").removeClass("show");
+                    humidTimer = null;
+                }, timeout)
+
+                return;
+            }
+                    $("#humid").addClass("show");
+                    var sound = new Howl({
+                        src: [soundPath]
+                    });
+                    if (sound) {
+                        sound.play();
+                    }
+                    humidTimer = setTimeout(function(){
+                    $("#humid").removeClass("show");
+                    humidTimer = null;
+                }, timeout);
+    }
+
+//LOAD ALL VIDEO AT DOCUMENT READY
+    function loadVid(item){                
+        if(!item.videoPath) return;
+        $(item.divId).attr('src', item.videoPath);
+        $(item.divId).get(0).load();
+        $(item.divId).get(0).pause();
+    }
+
     for (var elem in item){
         loadVid(item[elem]);
     }
 
+//SETUP FUNCTION READY TO BE CALLED
     function setCallVidTimer(item){
         if(!item) return false;
         if(item.videoTimer) return false;
@@ -203,9 +206,7 @@ $(function(){
         var hourOfDay = new Date().getHours();
         if (6 <= hourOfDay && hourOfDay < 19) {
             $(".map").removeClass("night_bg");
-            $(".map").removeClass("sunset_bg");
         } else if (19 <= hourOfDay && hourOfDay < 20) {
-            $(".map").removeClass("night_bg");
             $(".map").addClass("sunset_bg");
         } else if (20 <= hourOfDay || hourOfDay < 6 ) {
             $(".map").removeClass("sunset_bg");
@@ -215,13 +216,21 @@ $(function(){
 
     $(".screensaver").hide();    
     var saver_timer = setInterval(screenSaver, 20000);
+    var oceanSound = new Howl({
+            src: ['snd/ocean.wav'],
+            loop: true,
+            volume: 0.2
+    });
 
     function screenSaver(){
         $(".screensaver").show();
-            $(".screensaver").get(0).play();
+        $(".screensaver").get(0).play();
+        oceanSound.play();
     }
+
     function resetTimer(){
         $(".screensaver").hide();
+        oceanSound.stop();
         clearInterval(saver_timer); // stop current saver_timer
         saver_timer = setInterval(screenSaver, 20000); // start a new timer 
     }
@@ -288,9 +297,11 @@ $(function(){
             if(item[touch]){
                 if(item[touch].displayData){
                     item[touch].displayData(item[touch].soundPath, item[touch].videoLength);
+                    resetTimer();
                 } else {
                     if(!setCallVidTimer(item[touch])) return;
                     playVid(item[touch].divId, item[touch].soundPath);
+                    resetTimer();
                 }   
             }
         }
